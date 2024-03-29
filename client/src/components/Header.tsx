@@ -1,10 +1,14 @@
 import { FC, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLoaderData } from "react-router-dom";
 import NewListModal from "./modalWindows/NewListModal";
 import { IoHomeOutline } from "react-icons/io5";
+import { updateListsAfterDelete } from "../pages/Tasks";
+import { ILists } from "../types/types";
+
 const Header: FC = () => {
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
-
+  const listsFatch = useLoaderData() as ILists[];
+  const [lists, setLists] = useState<ILists[]>(listsFatch);
   return (
     <div>
       <header className="flex items-center justify-between bg-slate-800 p-4 shadow-sm backdrop-blur-sm">
@@ -47,7 +51,7 @@ const Header: FC = () => {
         </nav>
       </header>
       {visibleModal && (
-        <NewListModal type="post" setVisibleModal={setVisibleModal} />
+        <NewListModal type="post" setVisibleModal={setVisibleModal} updateData={() => updateListsAfterDelete(setLists)}/>
       )}
     </div>
   );

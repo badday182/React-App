@@ -2,6 +2,7 @@ export interface INewListModal {
   type: "post" | "patch";
   id?: number;
   setVisibleModal: (visible: boolean) => void;
+  updateData: () => void;
 }
 
 export interface ILists {
@@ -11,8 +12,10 @@ export interface ILists {
 }
 
 export interface IListOptionsModalProps {
-  visible: boolean;
+   visible: boolean;
   onClose: () => void;
   x: number;
   y: number;
+  listId: number | null;
+  updateListsAfterDelete : () => void;
   }

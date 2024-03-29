@@ -1,15 +1,24 @@
-
 import { FC, useEffect, useRef, useState } from "react";
 
-import { IListOptionsModalProps } from "../../types/types";
+import { IListOptionsModalProps, ILists } from "../../types/types";
 import { AiFillEdit } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
+import { instance } from "../../api/axios.api";
 
-const ListOptionsModal: FC<IListOptionsModalProps> = ({  visible, onClose, x, y}) => {
+const ListOptionsModal: FC<IListOptionsModalProps> = ({
+  listId,
+  visible,
+  onClose,
+  x,
+  y,
+  updateListsAfterDelete,
+}) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const deleteButtonRef = useRef<HTMLButtonElement>(null); // Ссылка на кнопку "Delete List"
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
 
+  const [lists, setLists] = useState<ILists[]>([]);
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -21,27 +30,44 @@ const ListOptionsModal: FC<IListOptionsModalProps> = ({  visible, onClose, x, y}
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+
+    
   }, []);
 
+ 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        onClose();
+    const fetchData = async () => {
+      try {
+        const response = await instance.get('/lists');
+        setLists(response.data);
+      } catch (error) {
+        console.error("Error fetching lists:", error);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    fetchData();
+  }, []);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
+
+  const handleDeleteList = async () => {
+    
+    console.log("Deleting list with ID:", listId);
+
+    try {
+      await instance.delete(`/lists/${listId}`);
+      console.log("List deleted successfully");
+      onClose();
+      updateListsAfterDelete(); // Обновление списка после удаления
+
+    } catch (error) {
+      console.error("Error deleting list:", error);
+    }
+  };
 
   const modalStyle = {
     top: Math.min(y, windowHeight - 200), // Ограничение по вертикали
     left: Math.min(x, windowWidth - 200), // Ограничение по горизонтали
   };
-
   return (
     <div
       ref={modalRef}
@@ -53,8 +79,17 @@ const ListOptionsModal: FC<IListOptionsModalProps> = ({  visible, onClose, x, y}
         className="absolute bg-slate-800 shadow-lg rounded-lg p-4 flex flex-col  items-start"
         style={modalStyle}
       >
-        <button className="btn flex items-center justify-center"><AiFillEdit className="mr-2" size={18}/>Edit List</button>
-        <button className="btn btn-red mt-2 flex items-center justify-center"><MdDeleteForever size={18} className="mr-2"/>Delete List</button>
+        <button className="btn flex items-center justify-center">
+          <AiFillEdit className="mr-2" size={18} />
+          Edit List
+        </button>
+        <button ref={deleteButtonRef}
+          onClick={handleDeleteList}
+          className="btn btn-red mt-2 flex items-center justify-center"
+        >
+          <MdDeleteForever size={18} className="mr-2" />
+          Delete List
+        </button>
       </div>
     </div>
   );
