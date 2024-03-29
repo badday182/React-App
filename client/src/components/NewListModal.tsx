@@ -1,11 +1,7 @@
 import { FC } from "react";
 import { Form } from "react-router-dom";
+import { INewListModal } from "../types/types";
 
-interface INewListModal {
-  type: "post" | "patch";
-  id?: number;
-  setVisibleModal: (visible: boolean) => void;
-}
 
 const NewListModal: FC<INewListModal> = ({ type, id, setVisibleModal }) => {
   return (

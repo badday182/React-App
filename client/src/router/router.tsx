@@ -4,6 +4,7 @@ import ErrorPage from "../pages/ErrorPage";
 import Tasks from "../pages/Tasks";
 import History from "../pages/History";
 import { listActions } from "../actions/listActions";
+import { listsLoader } from "../loaders/listsLoader";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Tasks />,
+        loader: listsLoader,
       },
       {
         path: "history",
