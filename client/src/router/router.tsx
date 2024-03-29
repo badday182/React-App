@@ -11,6 +11,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     errorElement: <ErrorPage />,
+    action: listActions,
     children: [
       {
         index: true,
@@ -23,8 +24,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "lists",
-        action: listActions,
         element: null,
+      
       },
     ],
   },
