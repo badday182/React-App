@@ -2,7 +2,7 @@ import { FC } from "react";
 import { listsLoader } from "../loaders/listsLoader";
 import { useLoaderData } from "react-router-dom";
 import { ILists } from "../types/types";
-import { title } from "process";
+
 const Tasks: FC = () => {
   const lists = useLoaderData() as ILists[]
   console.log(lists)
