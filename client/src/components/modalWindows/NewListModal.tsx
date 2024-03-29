@@ -1,21 +1,12 @@
-import { FC, useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { FC } from "react";
+import { Form } from "react-router-dom";
 import { INewListModal } from "../../types/types";
 
-const NewListModal: FC<INewListModal> = ({
-  type,
-  setVisibleModal,
-  updateData,
-}) => {
-
-
-  // const handleSubmit = () => {
-  //   setVisibleModal(false);
-  // };
+const NewListModal: FC<INewListModal> = ({ type, setVisibleModal }) => {
   const handleSubmit = () => {
-    updateData();
-    setVisibleModal(false); // Закрытие модального окна после создания списка
+    setVisibleModal(false);
   };
+
   return (
     <div className="fixed top-0 left-0 bottom-0 right-0 w-full h-full bg-black/50 flex justify-center items-center">
       <Form
