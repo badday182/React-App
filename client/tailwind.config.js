@@ -3,7 +3,7 @@ export const content = [
   "./src/**/*.{js,jsx,ts,tsx}",
 ];
 export const theme = {
-  conteiner:{
+  container:{
     padding:'2rem',
     center: true,
   },

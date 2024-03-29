@@ -1,10 +1,15 @@
 import { FC } from "react";
+import { Outlet } from "react-router-dom";
+import Header from "../components/Header";
 
 const Layout: FC = () => {
-return (
-    <div>
-        Layout
+  return (
+    <div className="min-h-screen bg-slate-900 pb-20 font-roboto text-white">
+      <Header></Header>
+      <div className="container">
+        <Outlet />
+      </div>
     </div>
-)
-}
-export default Layout
+  );
+};
+export default Layout;
