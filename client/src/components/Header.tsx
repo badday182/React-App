@@ -1,16 +1,23 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { MdAssignment } from "react-icons/md";
+import NewListModal from "./NewListModal";
+import { instance } from "../api/axios.api";
+
+
 const Header: FC = () => {
+  const [visibleModal, setVisibleModal] = useState<boolean>(false)
+
   return (
-    <header className="flex items-center justify-between bg-slate-800 p-4 shadow-sm backdrop-blur-sm">
-      <Link to="/">
+    <div>
+        <header className="flex items-center justify-between bg-slate-800 p-4 shadow-sm backdrop-blur-sm">
+         <Link to="/"> 
         <MdAssignment size={20} />
       </Link>
       <nav>
         <ul className="ml-auto mr-10 flex items-center gap-5">
           <li>
-            <button className="btn btn-green">Create new list </button>
+            <button onClick={()=>{setVisibleModal(true)}} className="btn btn-green">Create new list </button>
           </li>
           <li>
             <NavLink
@@ -35,6 +42,9 @@ const Header: FC = () => {
         </ul>
       </nav>
     </header>
+    {visibleModal && (<NewListModal type="post" id={1} setVisibleModal={setVisibleModal} />)}
+      </div>
+     
   );
 };
 

@@ -1,12 +1,9 @@
-import { FC } from "react";
-import CreateListModal from "../components/CreateListModal";
-
+import { FC, useState } from "react";
 const Tasks: FC = () => {
-return (
+  return (
     <div>
-        Tasks
-      <CreateListModal type="post" id={1} setVisibleModal={true}  />
+      Tasks
     </div>
-)
-}
-export default Tasks
+  );
+};
+export default Tasks;
