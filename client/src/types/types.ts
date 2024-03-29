@@ -9,3 +9,10 @@ export interface ILists {
   id?: number;
   dueDate: Date;
 }
+
+export interface IListOptionsModalProps {
+  visible: boolean;
+  onClose: () => void;
+  x: number;
+  y: number;
+  }

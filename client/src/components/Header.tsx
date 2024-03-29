@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { MdAssignment } from "react-icons/md";
-import NewListModal from "./NewListModal";
+import NewListModal from "./modalWindows/NewListModal";
 import { instance } from "../api/axios.api";
 
 

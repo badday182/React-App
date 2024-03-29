@@ -1,9 +1,17 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Form } from "react-router-dom";
-import { INewListModal } from "../types/types";
+import { INewListModal } from "../../types/types";
 
 
 const NewListModal: FC<INewListModal> = ({ type, id, setVisibleModal }) => {
+  const [showOptions, setShowOptions] = useState(false);
+  const handleOpenOptions = () => {
+    setShowOptions(true);
+  };
+
+  const handleCloseOptions = () => {
+    setShowOptions(false);
+  };
   return (
     <div className="fixed top-0 left-0 bottom-0 right-0 w-full h-full bg-black/50 flex justify-center items-center">
       <Form action="/lists" method={type} onSubmit={()=> setVisibleModal(false)} className="grid w-[300px] gap-2 rounded-md bg-slate-900 p-5">
