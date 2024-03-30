@@ -7,6 +7,7 @@ import { instance } from "../api/axios.api";
 import NewListModal from "../components/modalWindows/NewListModal";
 import { takeId, takeTitle } from "../features/list/listSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import NewTaskModal from "../components/modalWindows/NewTaskModal";
 
 export const updateListsAfterDelete = async (
   setLists: React.Dispatch<React.SetStateAction<ILists[]>>
@@ -30,12 +31,14 @@ const Tasks: FC = () => {
   );
 
   const [visibleModalRename, setVisibleModalRename] = useState<boolean>(false);
+  const [visibleTaskModal, setVisibleTaskModal] = useState<boolean>(false);
+ 
 
   const isvisibleModal = useAppSelector(
     (state) => state.renameListModalWindow.isVisible
   );
   useEffect(() => {
-    setVisibleModalRename((prev)=>!prev)
+    setVisibleModalRename((prev) => !prev);
   }, [isvisibleModal]);
 
   const dispatch = useAppDispatch();
@@ -68,6 +71,10 @@ const Tasks: FC = () => {
     setSelectedListId(null); // Сброс выбранного listId при закрытии модального окна
   };
 
+  const handleAddTask =()=>{
+    setVisibleTaskModal(true)
+    
+  }
   return (
     <div className="mt-5 rounded-md grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 bg-slate-800 p-4">
       {lists.map((list) => (
@@ -84,7 +91,7 @@ const Tasks: FC = () => {
             </button>
           </div>
 
-          <button className="btn btn-green m-auto">Add new Task</button>
+          <button onClick={handleAddTask} className="btn btn-green m-auto">Add new Task</button>
           <ListOptionsModal
             listId={selectedListId}
             visible={showOptions}
@@ -93,6 +100,14 @@ const Tasks: FC = () => {
             y={modalPosition.y}
             updateListsAfterDelete={() => updateListsAfterDelete(setLists)}
           />
+            {visibleTaskModal && (
+        <NewTaskModal
+          type="post"
+          listId={list.id!}
+         
+          setVisibleTaskModal={setVisibleTaskModal}
+        />
+      )}
         </div>
       ))}
       {/* Rename List Modal */}
@@ -104,6 +119,7 @@ const Tasks: FC = () => {
           title={selectedlistTitle!}
         />
       )}
+    
     </div>
   );
 };

@@ -1,3 +1,12 @@
+export interface INewTaskModal {
+  type: "post" | "patch";
+  id?: number;
+  name?: string,
+  description?: string,
+  priority?: string,
+  listId?: number,
+  setVisibleTaskModal?: (visible: boolean) => void;
+}
 export interface INewListModal {
   type: "post" | "patch";
   id?: number;
