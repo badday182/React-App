@@ -1,9 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { ILists } from "../types/types";
 import { PiDotsThreeVerticalLight } from "react-icons/pi";
 import ListOptionsModal from "../components/modalWindows/ListOptionsModal";
 import { instance } from "../api/axios.api";
+
+
 export const updateListsAfterDelete = async (setLists: React.Dispatch<React.SetStateAction<ILists[]>>) => {
     try {
       const response = await instance.get('/lists'); // Получение обновленного списка с сервера
@@ -19,8 +21,17 @@ const Tasks: FC = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [selectedListId, setSelectedListId] = useState<number | null>(null);
-
   
+  
+  const updateListsAfterAddNewList = async () => {
+    try {
+      const response = await instance.get('/lists'); // Получение обновленного списка с сервера
+      setLists(response.data); // Обновление состояния списка
+    } catch (error) {
+      console.error("Error updating lists after add new list:", error);
+    }
+  };
+  updateListsAfterAddNewList(); 
 
   const handleOpenOptions = (
     e: React.MouseEvent<HTMLButtonElement>,
