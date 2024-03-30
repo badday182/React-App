@@ -5,6 +5,7 @@ import { IoHomeOutline } from "react-icons/io5";
 
 const Header: FC = () => {
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  
   return (
     <div>
       <header className="flex items-center justify-between bg-slate-800 p-4 shadow-sm backdrop-blur-sm">
@@ -46,9 +47,11 @@ const Header: FC = () => {
           </ul>
         </nav>
       </header>
+      {/* Add List Modal */}
       {visibleModal && (
         <NewListModal type="post" setVisibleModal={setVisibleModal} />
       )}
+    
     </div>
   );
 };

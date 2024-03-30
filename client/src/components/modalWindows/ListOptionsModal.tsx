@@ -4,6 +4,8 @@ import { AiFillEdit } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
 import { instance } from "../../api/axios.api";
 import { IoCloseSharp } from "react-icons/io5";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { changeVisibility } from "../../features/renameListModalWindow/renameListModalWindow";
 
 const ListOptionsModal: FC<IListOptionsModalProps> = ({
   listId,
@@ -19,6 +21,9 @@ const ListOptionsModal: FC<IListOptionsModalProps> = ({
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
 
   const [lists, setLists] = useState<ILists[]>([]);
+
+  const listTitle = useAppSelector((state) => state.list.title)
+  const dispatch = useAppDispatch()
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -61,6 +66,20 @@ const ListOptionsModal: FC<IListOptionsModalProps> = ({
       console.error("Error deleting list:", error);
     }
   };
+  const handleEditList = async () => {
+   
+    console.log("Editing list with ID, title:", listId, listTitle);
+dispatch(changeVisibility())
+onClose();
+    // try {
+    //   await instance.delete(`/lists/${listId}`);
+    //   console.log("List deleted successfully");
+    //   onClose();
+    //   updateListsAfterDelete(); // Обновление списка после удаления
+    // } catch (error) {
+    //   console.error("Error deleting list:", error);
+    // }
+  };
 
   const modalStyle = {
     top: Math.min(y, windowHeight - 200), // Ограничение по вертикали
@@ -80,7 +99,7 @@ const ListOptionsModal: FC<IListOptionsModalProps> = ({
          <button className="btn-close rounded-full absolute top-1 right-1" onClick={handleCloseModal}>
           <IoCloseSharp size={15} />
         </button>
-        <button className="btn flex items-center justify-center">
+        <button  onClick={handleEditList} className="btn flex items-center justify-center">
           <AiFillEdit className="mr-2" size={18} />
           Edit Title  
         </button>

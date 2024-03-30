@@ -1,7 +1,8 @@
 export interface INewListModal {
   type: "post" | "patch";
   id?: number;
-  setVisibleModal: (visible: boolean) => void;
+  setVisibleModal?: (visible: boolean) => void;
+  title?: string,
 }
 
 export interface ILists {
