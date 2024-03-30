@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { ILists } from "../types/types";
+import { ILists, ITask } from "../types/types";
 import { PiDotsThreeVerticalLight } from "react-icons/pi";
 import ListOptionsModal from "../components/modalWindows/ListOptionsModal";
 import { instance } from "../api/axios.api";
 import NewListModal from "../components/modalWindows/NewListModal";
 import { takeId, takeTitle } from "../features/list/listSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import NewTaskModal from "../components/modalWindows/NewTaskModal";
+import { log } from "console";
 
 export const updateListsAfterDelete = async (
   setLists: React.Dispatch<React.SetStateAction<ILists[]>>
@@ -24,21 +26,51 @@ const Tasks: FC = () => {
   const [lists, setLists] = useState<ILists[]>(listsFatch);
   const [showOptions, setShowOptions] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [modalTaskPosition, setmodalTaskPosition] = useState({ x: 0, y: 0 });
   const [selectedListId, setSelectedListId] = useState<number | null>(null);
   const [selectedlistTitle, setSelectedlistTitle] = useState<string | null>(
     null
   );
 
   const [visibleModalRename, setVisibleModalRename] = useState<boolean>(false);
+  const [visibleTaskModal, setVisibleTaskModal] = useState<boolean>(false);
+
+  const [tasks, setTasks] = useState<ITask[]>([]); // State to store tasks
+
+  //   useEffect(() => {
+  //   console.log('tasks',tasks);
+
+  // }, []);
 
   const isvisibleModal = useAppSelector(
     (state) => state.renameListModalWindow.isVisible
   );
   useEffect(() => {
-    setVisibleModalRename((prev)=>!prev)
+    setVisibleModalRename((prev) => !prev);
   }, [isvisibleModal]);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        // const response = await instance.get(`/tasks?listId=${selectedListId}`);
+
+        const response = await instance.get(`/tasks`);
+
+        setTasks(response.data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+
+    // if (selectedListId) {
+    //   fetchTasks();
+    // }
+    // }, [selectedListId]);
+  }, [tasks]);
 
   const updateListsAfterAddNewList = async () => {
     try {
@@ -62,20 +94,43 @@ const Tasks: FC = () => {
     setSelectedlistTitle(listTitle);
     setModalPosition({ x: e.clientX, y: e.clientY });
   };
+  const handleOpenTaskOptions = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    listId: number,
+   
+  ) => {
+    // dispatch(takeTitle(listTitle));
+    // dispatch(takeId(listId));
+    // setShowOptions(true);
+    // setSelectedListId(listId);
+    // setSelectedlistTitle(listTitle);
+    setmodalTaskPosition({ x: e.clientX, y: e.clientY });
+  };
 
   const handleCloseOptions = () => {
     setShowOptions(false);
     setSelectedListId(null); // Сброс выбранного listId при закрытии модального окна
   };
 
+  const handleAddTask = (
+    // e: React.MouseEvent<HTMLButtonElement>,
+    listId: number,
+    // listTitle: string
+  ) => {
+    setSelectedListId(listId);
+    setVisibleTaskModal(true);
+  };
+
   return (
-    <div className="mt-5 rounded-md grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 bg-slate-800 p-4">
+    // <div className="mt-5 rounded-md grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 bg-slate-800 p-4">
+    <div className="mt-5 rounded-md flex flex-wrap flex-row items-start gap-4 bg-slate-800 p-4">
       {lists.map((list) => (
         <div
           key={list.id}
-          className="rounded-md bg-slate-700 flex flex-col p-2"
+          // className="rounded-md bg-slate-700 flex flex-col p-2 sm:w-56 w-full"
+          className="rounded-md bg-slate-700 flex flex-col p-2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 w-full"
         >
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-between ">
             <h2 className="text-lg">{list.title}</h2>
             <button
               onClick={(e) => handleOpenOptions(e, list.id!, list.title!)}
@@ -84,7 +139,27 @@ const Tasks: FC = () => {
             </button>
           </div>
 
-          <button className="btn btn-green m-auto">Add new Task</button>
+          {/* Render tasks */}
+          {tasks
+            .filter((task) => task.listId === list.id)
+            .map((task) => (
+              <div
+                key={task.id}
+                className="rounded-md bg-slate-700 flex flex-row p-1 px-0 mb-1"
+              >
+                <h3 className="text-md rounded-md border-gray-600  bg-slate-800 p-2 grow items-center" >{task.name}</h3>
+                <button onClick={(e) => handleOpenTaskOptions(e, task.id!)}>
+
+                <PiDotsThreeVerticalLight size={20} className="block"/>
+                </button>
+                {/* <p className="text-sm">{task.description}</p> */}
+                {/* Additional task details */}
+              </div>
+            ))}
+
+          <button onClick={()=>handleAddTask(list.id!)} className="btn btn-green m-auto">
+            Add new Task
+          </button>
           <ListOptionsModal
             listId={selectedListId}
             visible={showOptions}
@@ -93,6 +168,14 @@ const Tasks: FC = () => {
             y={modalPosition.y}
             updateListsAfterDelete={() => updateListsAfterDelete(setLists)}
           />
+          {visibleTaskModal && (
+            <NewTaskModal
+              type="post"
+              // listId={list.id!}
+              listId={selectedListId!}
+              setVisibleTaskModal={setVisibleTaskModal}
+            />
+          )}
         </div>
       ))}
       {/* Rename List Modal */}

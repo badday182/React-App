@@ -10,6 +10,13 @@ export const theme = {
   extend: {
     fontFamily: {
       roboto: ['Roboto', 'sans-serif']
+    },
+    flexBasis: {
+      '1/2': '48%',
+      '1/3': '31%',
+      '1/4': '23%',
+      '1/5': '18%',
+      
     }
   },
 };
