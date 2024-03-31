@@ -8,6 +8,7 @@ import NewListModal from "../components/modalWindows/NewListModal";
 import { takeId, takeTitle } from "../features/list/listSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import NewTaskModal from "../components/modalWindows/NewTaskModal";
+import TaskOptionsModal from "../components/modalWindows/TaskOptionsModal";
 
 export const updateListsAfterDelete = async (
   setLists: React.Dispatch<React.SetStateAction<ILists[]>>
@@ -24,9 +25,13 @@ const Tasks: FC = () => {
   const listsFatch = useLoaderData() as ILists[];
   const [lists, setLists] = useState<ILists[]>(listsFatch);
   const [showOptions, setShowOptions] = useState(false);
+
+  const [showTaskOptions, setShowTaskOptions] = useState(!false);
+
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [modalTaskPosition, setmodalTaskPosition] = useState({ x: 0, y: 0 });
   const [selectedListId, setSelectedListId] = useState<number | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [selectedlistTitle, setSelectedlistTitle] = useState<string | null>(
     null
   );
@@ -96,13 +101,13 @@ const Tasks: FC = () => {
   };
   const handleOpenTaskOptions = (
     e: React.MouseEvent<HTMLButtonElement>,
-    listId: number,
+    taskId: number,
    
   ) => {
     // dispatch(takeTitle(listTitle));
     // dispatch(takeId(listId));
     // setShowOptions(true);
-    // setSelectedListId(listId);
+    setSelectedTaskId(taskId);
     // setSelectedlistTitle(listTitle);
     setmodalTaskPosition({ x: e.clientX, y: e.clientY });
   };
@@ -110,6 +115,10 @@ const Tasks: FC = () => {
   const handleCloseOptions = () => {
     setShowOptions(false);
     setSelectedListId(null); // Сброс выбранного listId при закрытии модального окна
+  };
+  const handleCloseTaskOptions = () => {
+    setShowTaskOptions(false);
+    setSelectedTaskId(null); // Сброс выбранного listId при закрытии модального окна
   };
 
 
@@ -154,7 +163,14 @@ const Tasks: FC = () => {
 
                 <PiDotsThreeVerticalLight size={20} className="block"/>
                 </button>
-                {/* <p className="text-sm">{task.description}</p> */}
+                <TaskOptionsModal
+                 taskId={selectedTaskId}
+                 visible={showTaskOptions}
+                 onClose={handleCloseTaskOptions}
+                 x={modalPosition.x}
+                 y={modalPosition.y}
+                 updateListsAfterDelete={() => updateListsAfterDelete(setLists)}></TaskOptionsModal>
+               
                 {/* Additional task details */}
               </div>
             ))}

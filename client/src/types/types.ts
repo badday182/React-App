@@ -41,3 +41,11 @@ export interface IListOptionsModalProps {
   listId: number | null;
   updateListsAfterDelete: () => void;
 }
+export interface ITaskOptionsModal {
+  visible: boolean;
+  onClose: () => void;
+  x: number;
+  y: number;
+  taskId: number | null;
+  updateListsAfterDelete: () => void;
+}
