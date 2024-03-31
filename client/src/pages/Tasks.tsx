@@ -8,7 +8,6 @@ import NewListModal from "../components/modalWindows/NewListModal";
 import { takeId, takeTitle } from "../features/list/listSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import NewTaskModal from "../components/modalWindows/NewTaskModal";
-import { log } from "console";
 
 export const updateListsAfterDelete = async (
   setLists: React.Dispatch<React.SetStateAction<ILists[]>>
@@ -41,6 +40,7 @@ const Tasks: FC = () => {
   //   console.log('tasks',tasks);
 
   // }, []);
+
 
   const isvisibleModal = useAppSelector(
     (state) => state.renameListModalWindow.isVisible
@@ -112,6 +112,7 @@ const Tasks: FC = () => {
     setSelectedListId(null); // Сброс выбранного listId при закрытии модального окна
   };
 
+
   const handleAddTask = (
     // e: React.MouseEvent<HTMLButtonElement>,
     listId: number,
@@ -120,6 +121,7 @@ const Tasks: FC = () => {
     setSelectedListId(listId);
     setVisibleTaskModal(true);
   };
+
 
   return (
     // <div className="mt-5 rounded-md grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 bg-slate-800 p-4">
@@ -187,6 +189,7 @@ const Tasks: FC = () => {
           title={selectedlistTitle!}
         />
       )}
+    
     </div>
   );
 };
