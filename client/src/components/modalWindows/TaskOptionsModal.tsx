@@ -16,11 +16,11 @@ const TaskOptionsModal: FC<ITaskOptionsModal> = ({
   updateListsAfterDelete,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const deleteButtonRef = useRef<HTMLButtonElement>(null); // Ссылка на кнопку "Delete List"
+  // const deleteButtonRef = useRef<HTMLButtonElement>(null); // Ссылка на кнопку " Delete Task"
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
 
-  const [lists, setLists] = useState<ILists[]>([]);
+  // const [lists, setLists] = useState<ILists[]>([]);
 
   const listTitle = useAppSelector((state) => state.list.title)
   const dispatch = useAppDispatch()
@@ -37,28 +37,28 @@ const TaskOptionsModal: FC<ITaskOptionsModal> = ({
     };
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await instance.get("/lists");
-        setLists(response.data);
-      } catch (error) {
-        console.error("Error fetching lists:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await instance.get("/lists");
+  //       setLists(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching lists:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const handleCloseModal = () => {
     onClose(); // Закрытие модального окна
   };
 
-  const handleDeleteList = async () => {
+  const handleDeleteTask = async () => {
     console.log("Deleting list with ID:", taskId);
 
     try {
-      await instance.delete(`/lists/${taskId}`);
+      await instance.delete(`/tasks/${taskId}`);
       console.log("List deleted successfully");
       onClose();
       updateListsAfterDelete(); // Обновление списка после удаления
@@ -104,8 +104,8 @@ onClose();
           Edit Task  
         </button>
         <button
-          ref={deleteButtonRef}
-          onClick={handleDeleteList}
+          // ref={deleteButtonRef}
+          onClick={handleDeleteTask}
           className="btn btn-red mt-2 flex items-center justify-center"
         >
           <MdDeleteForever size={18} className="mr-2" />

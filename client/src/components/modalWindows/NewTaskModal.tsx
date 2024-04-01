@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useRef } from "react";
 import { Form } from "react-router-dom";
 import { INewTaskModal } from "../../types/types";
 import { useAppSelector } from "../../app/hooks";
@@ -18,7 +18,13 @@ const NewTaskModal: FC<INewTaskModal> = ({
   const handleSubmit = () => {
     setVisibleTaskModal!(false);
   };
-
+  const inputRef = useRef<HTMLInputElement>(null); // Создаем реф для инпута
+  
+  useEffect(() => {
+    
+    inputRef.current!.focus(); // Устанавливаем фокус на инпут при открытии модального окна
+ 
+}, []);
   return (
     <div className="fixed top-0 left-0 bottom-0 right-0 w-full h-full bg-black/50 flex justify-center items-center">
       <Form
@@ -32,7 +38,8 @@ const NewTaskModal: FC<INewTaskModal> = ({
             {type === "patch" ? `Add new Task name id` : "Task name"}
           </small>
           <input
-            className="input w-full"
+          ref={inputRef}
+            className="input w-full placeholder:text-slate-500"
             type="text"
             name="name"
             placeholder={name || "Add Name"}
@@ -43,7 +50,7 @@ const NewTaskModal: FC<INewTaskModal> = ({
             {type === "patch" ? `Add new List name id` : "Task description"}
           </small>
           <input
-            className="input w-full"
+            className="input w-full placeholder:text-slate-500"
             type="text"
             name="description"
             placeholder={description || "Add description"}

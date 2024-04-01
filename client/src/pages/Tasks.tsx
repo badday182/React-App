@@ -26,7 +26,7 @@ const Tasks: FC = () => {
   const [lists, setLists] = useState<ILists[]>(listsFatch);
   const [showOptions, setShowOptions] = useState(false);
 
-  const [showTaskOptions, setShowTaskOptions] = useState(!false);
+  const [showTaskOptions, setShowTaskOptions] = useState(false); //showTaskOptions
 
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [modalTaskPosition, setmodalTaskPosition] = useState({ x: 0, y: 0 });
@@ -46,13 +46,13 @@ const Tasks: FC = () => {
 
   // }, []);
 
-
   const isvisibleModal = useAppSelector(
     (state) => state.renameListModalWindow.isVisible
   );
   useEffect(() => {
     setVisibleModalRename((prev) => !prev);
   }, [isvisibleModal]);
+
 
   const dispatch = useAppDispatch();
 
@@ -101,12 +101,11 @@ const Tasks: FC = () => {
   };
   const handleOpenTaskOptions = (
     e: React.MouseEvent<HTMLButtonElement>,
-    taskId: number,
-   
+    taskId: number
   ) => {
     // dispatch(takeTitle(listTitle));
     // dispatch(takeId(listId));
-    // setShowOptions(true);
+    setShowTaskOptions(true);
     setSelectedTaskId(taskId);
     // setSelectedlistTitle(listTitle);
     setmodalTaskPosition({ x: e.clientX, y: e.clientY });
@@ -121,16 +120,14 @@ const Tasks: FC = () => {
     setSelectedTaskId(null); // Сброс выбранного listId при закрытии модального окна
   };
 
-
   const handleAddTask = (
     // e: React.MouseEvent<HTMLButtonElement>,
-    listId: number,
+    listId: number
     // listTitle: string
   ) => {
     setSelectedListId(listId);
     setVisibleTaskModal(true);
   };
-
 
   return (
     // <div className="mt-5 rounded-md grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 bg-slate-800 p-4">
@@ -158,24 +155,33 @@ const Tasks: FC = () => {
                 key={task.id}
                 className="rounded-md bg-slate-700 flex flex-row p-1 px-0 mb-1"
               >
-                <h3 className="text-md rounded-md border-gray-600  bg-slate-800 p-2 grow items-center" >{task.name}</h3>
+                <h3 className="text-md rounded-md border-gray-600  bg-slate-800 p-2 grow items-center">
+                  {task.name}
+                </h3>
                 <button onClick={(e) => handleOpenTaskOptions(e, task.id!)}>
-
-                <PiDotsThreeVerticalLight size={20} className="block"/>
+                  <PiDotsThreeVerticalLight size={20} className="block" />
                 </button>
-                <TaskOptionsModal
-                 taskId={selectedTaskId}
-                 visible={showTaskOptions}
-                 onClose={handleCloseTaskOptions}
-                 x={modalPosition.x}
-                 y={modalPosition.y}
-                 updateListsAfterDelete={() => updateListsAfterDelete(setLists)}></TaskOptionsModal>
-               
+                {showTaskOptions && (
+                  <TaskOptionsModal
+                    taskId={selectedTaskId}
+                    visible={showTaskOptions}
+                    onClose={handleCloseTaskOptions}
+                    x={modalTaskPosition.x}
+                    y={modalTaskPosition.y}
+                    updateListsAfterDelete={() =>
+                      updateListsAfterDelete(setLists)
+                    }
+                  ></TaskOptionsModal>
+                )}
+
                 {/* Additional task details */}
               </div>
             ))}
 
-          <button onClick={()=>handleAddTask(list.id!)} className="btn btn-green m-auto">
+          <button
+            onClick={() => handleAddTask(list.id!)}
+            className="btn btn-green m-auto"
+          >
             Add new Task
           </button>
           <ListOptionsModal
@@ -205,7 +211,6 @@ const Tasks: FC = () => {
           title={selectedlistTitle!}
         />
       )}
-    
     </div>
   );
 };

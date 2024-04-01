@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useRef } from "react";
 import { Form } from "react-router-dom";
 import { INewListModal } from "../../types/types";
 import { useAppSelector } from "../../app/hooks";
@@ -9,19 +9,21 @@ const NewListModal: FC<INewListModal> = ({
   // id,
   title,
 }) => {
-  
   const id = useAppSelector((state) => state.list.id);
-  useEffect(() => {
-    console.log('id', id);
-    
-  }, []);
-
+  // useEffect(() => {
+  //   console.log("id", id);
+  // }, []);
 
   const handleSubmit = () => {
-
-  setVisibleModal!(false);
+    setVisibleModal!(false);
   };
+  const inputRef = useRef<HTMLInputElement>(null); // Создаем реф для инпута
 
+  useEffect(() => {
+    
+      inputRef.current!.focus(); // Устанавливаем фокус на инпут при открытии модального окна
+   
+  }, []);
   return (
     <div className="fixed top-0 left-0 bottom-0 right-0 w-full h-full bg-black/50 flex justify-center items-center">
       <Form
@@ -35,7 +37,8 @@ const NewListModal: FC<INewListModal> = ({
             {type === "patch" ? `Add new List title id${id}` : "List title"}
           </small>
           <input
-            className="input w-full"
+            ref={inputRef}
+            className="input w-full placeholder:text-slate-500"
             type="text"
             name="title"
             placeholder={title || "Add Title"}
@@ -59,8 +62,6 @@ const NewListModal: FC<INewListModal> = ({
 };
 
 export default NewListModal;
-
-
 
 // import { FC, useEffect, useState } from "react";
 // import { Form } from "react-router-dom";
