@@ -99,10 +99,10 @@ onClose();
          <button className="btn-close rounded-full absolute top-1 right-1" onClick={handleCloseModal}>
           <IoCloseSharp size={15} />
         </button>
-        <button  onClick={handleEditList} className="btn flex items-center justify-center">
+        {/* <button  onClick={handleEditList} className="btn flex items-center justify-center">
           <AiFillEdit className="mr-2" size={18} />
           Edit Task  
-        </button>
+        </button> */}
         <button
           // ref={deleteButtonRef}
           onClick={handleDeleteTask}
