@@ -1,7 +1,8 @@
 import { FC, useEffect, useRef } from "react";
 import { Form } from "react-router-dom";
 import { INewTaskModal } from "../../types/types";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { resetId } from "../../features/list/listSlice";
 
 const NewTaskModal: FC<INewTaskModal> = ({
   type,
@@ -17,14 +18,18 @@ const NewTaskModal: FC<INewTaskModal> = ({
 
   const handleSubmit = () => {
     setVisibleTaskModal!(false);
+    dispatch(resetId())
   };
   const inputRef = useRef<HTMLInputElement>(null); // Создаем реф для инпута
   
   useEffect(() => {
     
     inputRef.current!.focus(); // Устанавливаем фокус на инпут при открытии модального окна
- 
-}, []);
+  }, []);
+  const dispatch = useAppDispatch();
+  const hendleSaveCreate =()=>{
+  dispatch(resetId())
+}
   return (
     <div className="fixed top-0 left-0 bottom-0 right-0 w-full h-full bg-black/50 flex justify-center items-center">
       <Form
@@ -57,13 +62,13 @@ const NewTaskModal: FC<INewTaskModal> = ({
           ></input>
         </label>
           {/* Добавляем скрытое поле для передачи ID списка */}
-          <input type="hidden" name="listId" value={listId}></input>
+          <input type="hidden" name="listId" value={listId!}></input>
         <div className="flex item-center gap-2">
-          <button className="btn btn-green" type="submit">
+          <button onClick={hendleSaveCreate} className="btn btn-green" type="submit">
             {type === "patch" ? "Save" : "Create"}
           </button>
           <button
-            onClick={() => setVisibleTaskModal!(false)}
+            onClick={() => (setVisibleTaskModal!(false), dispatch(resetId()))}
             className="btn btn-red "
           >
             Close

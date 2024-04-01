@@ -19,6 +19,9 @@ export const listSlice = createSlice({
     takeId: (state, action: PayloadAction<number>) => {
       state.id = action.payload
     },
+    resetId: (state) => {
+      state.id = null
+    },
     takeTitle: (state, action: PayloadAction<string>) => {
       state.title = action.payload
     },
@@ -26,6 +29,6 @@ export const listSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { takeId, takeTitle } = listSlice.actions
+export const { takeId, takeTitle,resetId } = listSlice.actions
 
 export default listSlice.reducer

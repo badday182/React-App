@@ -21,7 +21,7 @@ const Header: FC = () => {
                 }}
                 className="btn btn-green"
               >
-                Create new list{" "}
+                Create new list
               </button>
             </li>
             <li>

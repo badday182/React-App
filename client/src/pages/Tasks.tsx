@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { ILists, ITask } from "../types/types";
+import { ILists, ITask, ITaskOptionsModal } from "../types/types";
 import { PiDotsThreeVerticalLight } from "react-icons/pi";
 import ListOptionsModal from "../components/modalWindows/ListOptionsModal";
 import { instance } from "../api/axios.api";
@@ -22,15 +22,23 @@ export const updateListsAfterDelete = async (
 };
 
 const Tasks: FC = () => {
-  const listsFatch = useLoaderData() as ILists[];
-  const [lists, setLists] = useState<ILists[]>(listsFatch);
+    
+    const listsFatch = useLoaderData() as ILists[];
+    const [lists, setLists] = useState<ILists[]>(listsFatch);
+    
   const [showOptions, setShowOptions] = useState(false);
 
   const [showTaskOptions, setShowTaskOptions] = useState(false); //showTaskOptions
-
+  
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [modalTaskPosition, setmodalTaskPosition] = useState({ x: 0, y: 0 });
-  const [selectedListId, setSelectedListId] = useState<number | null>(null);
+  
+  
+  const ListIdRedux = useAppSelector(
+      (state) => state.list.id
+    );
+  const [selectedListId, setSelectedListId] = useState<number | null>(ListIdRedux);
+//   const [selectedListId, setSelectedListId] = useState<number | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [selectedlistTitle, setSelectedlistTitle] = useState<string | null>(
     null
@@ -39,12 +47,17 @@ const Tasks: FC = () => {
   const [visibleModalRename, setVisibleModalRename] = useState<boolean>(false);
   const [visibleTaskModal, setVisibleTaskModal] = useState<boolean>(false);
 
+//   const tasksFatch = useLoaderData() as ITask[];
   const [tasks, setTasks] = useState<ITask[]>([]); // State to store tasks
 
-  //   useEffect(() => {
-  //   console.log('tasks',tasks);
+//     useEffect(() => {
+//     console.log('taselectedTaskIdsks', selectedTaskId);
 
-  // }, []);
+//   }, [selectedTaskId]);
+
+//     useEffect(() => {
+   
+//   }, []);
 
   const isvisibleModal = useAppSelector(
     (state) => state.renameListModalWindow.isVisible
@@ -130,7 +143,6 @@ const Tasks: FC = () => {
   };
 
   return (
-    // <div className="mt-5 rounded-md grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 bg-slate-800 p-4">
     <div className="mt-5 rounded-md flex flex-wrap flex-row items-start gap-4 bg-slate-800 p-4">
       {lists.map((list) => (
         <div
