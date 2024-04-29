@@ -21,7 +21,7 @@
 
 3. **Set up the server:**
 
-   - Database password: 789654123CuteV
+   - Set up PostgreSQL (Database password: 789654123CuteV)
   
 
    - Install dependencies:
